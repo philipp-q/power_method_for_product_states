@@ -24,6 +24,7 @@ def contract_energy(H, psiL, psiR) -> float:
 
 # Computes <psiL | H | psiR>
 def contract_energy_mpo(H, psiL, psiR, rangeL=None, rangeR=None) -> float:
+    n_qubits = H.n_qubits
     if rangeL is None and rangeR is None:
         rangeL = range(n_qubits//2)
         rangeR = range(n_qubits//2, n_qubits)
@@ -31,7 +32,6 @@ def contract_energy_mpo(H, psiL, psiR, rangeL=None, rangeR=None) -> float:
         raise Exception("this can't be the case, either specify both or neither")
 
     energy = 0
-    n_qubits = H.n_qubits
     d = int(2**(n_qubits/2))
     # en_einsum = np.einsum('ijkl, i, j, k, l', H, psiL, psiR, np.conj(psiL), np.conj(psiR))
     indexs = 0
@@ -95,12 +95,12 @@ def compute_environment(H, psiL, psiR, which: str='l'):
     return env
 
 def compute_environment_mpo(H, psiL, psiR, which: str='l', rangeL=None, rangeR=None):
+    n_qubits = H.n_qubits
     if rangeL is None and rangeR is None:
         rangeL = range(n_qubits//2)
         rangeR = range(n_qubits//2, n_qubits)
     elif rangeL is None and not rangeR is None or not rangeL is None and rangeR is None:
         raise Exception("this can't be the case, either specify both or neither")
-    n_qubits = H.n_qubits
     d = int(2**(n_qubits/2))
     environment = None
     first = True
@@ -197,9 +197,9 @@ def optimize_wavefunctions_mpo(H, psiL, psiR, SL=1., TOL=1e-10, silent=True):
     ''' 
     modified ranges!
     '''
-    rangeL = range(1, n_qubits//2+1)
+    # rangeL = range(1, n_qubits//2+1)
     # rangeR = itertools.chain([0], range(n_qubits//2+1, n_qubits))
-    rangeR = [0] + list(range(n_qubits//2+1, n_qubits))
+    # rangeR = [0] + list(range(n_qubits//2+1, n_qubits))
     ''' 
     end modified ranges!
     '''
